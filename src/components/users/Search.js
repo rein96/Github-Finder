@@ -12,7 +12,8 @@ class Search extends Component {
     static propTypes = {
         searchUsers: PropTypes.func.isRequired,
         clearUsers: PropTypes.func.isRequired,
-        showClear: PropTypes.bool.isRequired
+        showClear: PropTypes.bool.isRequired,
+        setAlert: PropTypes.func.isRequired
     }
 
     onChange = (event) => {
@@ -24,15 +25,22 @@ class Search extends Component {
         event.preventDefault();
         console.log(this.state.text);
 
-        // call searchUsers() from App.js
-        this.props.searchUsers(this.state.text);
+        if (this.state.text === '' ) {
+            this.props.setAlert('Please enter something on the search bar :)', 'light');  //from App.js
+        } else {
+            // call searchUsers() from App.js
+            this.props.searchUsers(this.state.text);
 
-        // clear the form and state
-        this.setState( { text: '' } )
+            // clear the form and state
+            this.setState( { text: '' } )
+        }   
+
+        
 
     }
 
     render() {
+        // const { showClear, clearUsers } = this.props;    //optional
         return (
             <div>
                 <form onSubmit={this.onSubmit} className="form">
@@ -46,6 +54,7 @@ class Search extends Component {
 
                     <input type="submit" value="Search" className="btn btn-dark btn-block"   />
                 </form>
+                {/* To show button CLEAR USERS or remove it, this.props.showClear = false || true from App.js */}
                     {this.props.showClear === true ? <button className="btn btn-light btn-block" onClick={this.props.clearUsers}> Clear users </button> : ''}
                 
             </div>

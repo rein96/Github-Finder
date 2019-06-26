@@ -1,16 +1,20 @@
 import React from 'react';
 import axios from 'axios';
+import { BrowserRouter , Switch, Route } from 'react-router-dom';
 
 import './App.css';
 import Navbar from './components/layout/Navbar'
 import Users from './components/users/Users'
 import Search from './components/users/Search'
+import Alert from './components/layout/Alert'
+
 
 class App extends React.Component {
 
   state = {
     users: [],
-    loading: false
+    loading: false,
+    alert: null,  // or  alert: { message: "Please enter something", type: "light" }
   }
 
   // For Initial render github users (this is optional)
@@ -47,8 +51,24 @@ class App extends React.Component {
   }
 
 
+  setAlert = (message, type) => {
+    this.setState({
+      alert: {
+        message: message,
+        type:type
+      }
+    })
+
+    setTimeout( () => this.setState( {alert:null} ), 3000 )
+
+  };
+
+
 
   render() {
+
+    // const { users, loading } = this.state;  //optional
+
     return (
       <div className="App">
         
@@ -56,10 +76,13 @@ class App extends React.Component {
 
         <div className="container">
 
+          <Alert alert={this.state.alert}  />
+
           <Search 
           searchUsers= {this.searchUsers} 
           clearUsers= {this.clearUsers} 
           showClear= { this.state.users.length > 0 ? true : false } 
+          setAlert = {this.setAlert}
           />
 
           <Users loading={this.state.loading} users={this.state.users} />

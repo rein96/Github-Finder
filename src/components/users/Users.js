@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 
 // this.props = loading + users
 
+// functional component
 const Users = (props) => {
 
-    if (props.loading) {
+    if (props.loading == true) {
         return <Spinner />
     } else {
         return (
