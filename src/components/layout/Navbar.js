@@ -1,5 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'  //Proptypes -> propTypes on code
+import React from 'react';
+import PropTypes from 'prop-types';  //Proptypes -> propTypes on code
+import { Link } from 'react-router-dom';    //use curly bracket { Link } because it doesn't "export default" on react-router-dom
 
 // functional component
  const Navbar = (props) => {
@@ -8,6 +9,16 @@ import PropTypes from 'prop-types'  //Proptypes -> propTypes on code
             <h1>
                 <i className={props.icon} /> &nbsp; Github Finder
             </h1>
+
+            <ul>
+                <li>
+                    <Link to='/'> Home </Link>
+                </li>
+                    {/* use Link instead of <a href>, because Link keep App.js STATE */}
+                <li>
+                    <Link to='/about'> About </Link>
+                </li>
+            </ul>
         </nav>
     );
 }
