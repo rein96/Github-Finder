@@ -7,7 +7,9 @@ import { Link } from 'react-router-dom';    //use curly bracket { Link } because
     return (
         <nav className="navbar bg-primary">
             <h1>
-                <i className={props.icon} /> &nbsp; Github Finder
+                 <Link to='/' >
+                     <i className={props.icon} /> &nbsp; Github Finder
+                </Link>
             </h1>
 
             <ul>

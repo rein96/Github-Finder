@@ -9,8 +9,20 @@ import UserDetail from './components/users/UserDetail'
 import Search from './components/users/Search'
 import Alert from './components/layout/Alert'
 import About from './components/pages/About'
+import NotFound from './components/pages/NotFound'
 
+let githubClientId;
+let githubClientSecret;
 
+if(process.env.NODE_ENV !== 'production') {
+  // From .env.local (secret .gitignore)
+  githubClientId = process.env.REACT_APP_GITHUB_CLIENT;
+  githubClientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
+
+} else {
+  githubClientId = process.env.GITHUB_CLIENT;
+  githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
+}
 
 class App extends React.Component {
 
@@ -22,15 +34,19 @@ class App extends React.Component {
     alert: null  // or  alert: { message: "Please enter something", type: "light" }
   }
 
+
+
   // For Initial render github users (this is optional)
   async componentDidMount() {
     // console.log(process.env.REACT_APP_GITHUB_CLIENT_SECRET);   //testing .env.local has been connected or not
     this.setState( {loading: true} );
 
-    const res = await axios.get(`https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+    // const res = await axios.get(`https://api.github.com/users?client_id=${githubClientId}&client_secret=${githubClientSecret}`);
+    // this.setState( {users : res.data, loading: false} )
+    const res = await axios.get(`https://api.github.com/search/users?q=rein96&client_id=${githubClientId}&client_secret=${githubClientSecret}`);
 
-    // console.log(res.data);
-    this.setState( {users : res.data, loading: false} )
+    console.log(res.data.items);
+    this.setState( {users : res.data.items, loading: false} )
   }
 
 
@@ -40,7 +56,7 @@ class App extends React.Component {
 
     this.setState( { loading: true } );
 
-    const res = await axios.get(`https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+    const res = await axios.get(`https://api.github.com/search/users?q=${text}&client_id=${githubClientId}&client_secret=${githubClientSecret}`);
 
 
     console.log(res);
@@ -53,7 +69,7 @@ class App extends React.Component {
   getUser = async (username) => {
     this.setState( { loading: true } );
 
-    const res = await axios.get(`https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+    const res = await axios.get(`https://api.github.com/users/${username}?client_id=${githubClientId}&client_secret=${githubClientSecret}`);
 
     console.log('%c res userDetail', 'color:orange; font-weight:bold;');
     console.log(res);
@@ -65,7 +81,7 @@ class App extends React.Component {
   getUserRepos = async (username) => {
     this.setState( { loading: true } );
 
-    const res = await axios.get(`https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${process.env.REACT_APP_GITHUB_CLIENT}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+    const res = await axios.get(`https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${githubClientId}&client_secret=${githubClientSecret}`);
 
 
     this.setState( { repos : res.data, loading: false} )
@@ -136,6 +152,8 @@ class App extends React.Component {
                     loading={this.state.loading}  
                   />
                 )} />
+
+                <Route component={NotFound} />
             </Switch>
 
             
